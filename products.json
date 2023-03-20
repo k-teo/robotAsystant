@@ -1,0 +1,21 @@
+{
+  "products": [
+    {
+      "id": 1,
+      "name": "mleko",
+      "x": 1,
+      "y": 1,
+      "shelf": 2,
+      "prize": 50,
+      "amount": 50
+    },
+    {
+      "id": 2,
+      "name": "kukurydza",
+      "x": 1,
+      "y": 1,
+      "shelf": 2,
+      "prize": 50,
+      "amount": 50
+    }]
+}

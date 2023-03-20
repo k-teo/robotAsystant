@@ -1,0 +1,47 @@
+{
+  "size": {
+    "width": 10000,
+    "length": 10000
+  },
+  "shelfs": [
+    {
+      "id": 1,
+      "width": 400,
+      "length": 5000,
+      "distancefromleft": 1000,
+      "distancefrombottom": 0,
+      "numberofshelfs": 6
+    },
+        {
+      "id": 2,
+      "width": 800,
+      "length": 3500,
+      "distancefromleft": 1700,
+      "distancefrombottom": 2000,
+      "numberofshelfs": 2
+    },
+    {
+      "id": 3,
+      "width": 800,
+      "length": 3500,
+      "distancefromleft": 5700,
+      "distancefrombottom": 2000,
+      "numberofshelfs": 2
+    },
+    {
+      "id": 3,
+      "width": 800,
+      "length": 3500,
+      "distancefromleft": 1700,
+      "distancefrombottom": 3300,
+      "numberofshelfs": 2
+    },
+    {
+      "id": 4,
+      "width": 800,
+      "length": 3500,
+      "distancefromleft": 5700,
+      "distancefrombottom": 3300,
+      "numberofshelfs": 2
+    }]
+}

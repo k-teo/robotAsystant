@@ -2,6 +2,7 @@ import pygame
 import sys
 import Node
 import os
+from datetime import datetime
 
 
 class MapCreator:
@@ -102,6 +103,7 @@ class MapCreator:
                                 if c.id > node.id:
                                     file.write(str(node.id) + separator + str(c.id) + '\n')
                         file.close()
+                        print('Zapisano: ' +datetime.now().strftime("%H:%M:%S"))
                         #save data
             self.show()
 

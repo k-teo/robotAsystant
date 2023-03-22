@@ -4,3 +4,4 @@ class Node:
         self.x = x
         self.y = y
         self.connections = []
+        self.products = []

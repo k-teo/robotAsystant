@@ -7,5 +7,6 @@ class Side(Enum):
     W = 4
 
 class Product:
-    def __init__(self, side):
-        pass
+    def __init__(self, name, side:Side):
+        self.side = side
+        self.name = name

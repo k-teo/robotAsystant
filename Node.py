@@ -5,3 +5,4 @@ class Node:
         self.y = y
         self.connections = []
         self.products = []
+        self.paths = []

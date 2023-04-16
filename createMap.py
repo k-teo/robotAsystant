@@ -137,3 +137,41 @@ class MapCreator:
 
 m = MapCreator()
 m.loop()
+
+def mapnegation():
+    nodes = []
+    negationNodes = []
+    if os.path.isfile('Nodes.csv') and os.path.isfile('Connections.csv') and os.path.isfile('Product.csv'):
+        file = open('Nodes.csv')
+        for line in file.read().splitlines():
+            val = [int(i) for i in line.split(';')]
+            nodes.append(Node.Node(val[0], val[1], val[2]))
+            negationNodes.append(Node.Node(val[0], val[1], val[2]))
+        file.close()
+        file = open('Connections.csv')
+        for line in file.read().splitlines():
+            val = [int(i) for i in line.split(';')]
+            nodes[val[0]].connections.append(nodes[val[1]])
+            nodes[val[1]].connections.append(nodes[val[0]])
+        file.close()
+    else:
+        print('error')
+        return
+
+    for i in range(len(nodes)):
+        for j in range(len(nodes)):
+            notconnected = True
+            for k in nodes[i].connections:
+                if k.id == nodes[j].id:
+                    notconnected = False
+            if i != j and abs(nodes[i].x-nodes[j].x) + abs(nodes[i].y-nodes[j].y) == 1 and notconnected:
+                negationNodes[i].connections.append(negationNodes[j])
+                negationNodes[j].connections.append(negationNodes[i])
+    file = open('Paths.csv', 'w')
+    for node in negationNodes:
+        for c in node.connections:
+            if c.id > node.id:
+                file.write(str(node.id) + ";" + str(c.id) + '\n')
+    file.close()
+
+mapnegation()

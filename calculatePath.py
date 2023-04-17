@@ -42,7 +42,6 @@ def calculate_path(graph, start, destination):
 def bfs(graph, start, destination):
     queue = [(start, [start])]
     while queue:
-        print("calculating")
         (vertex, path) = queue.pop(0)
         for v in graph[vertex].connections - set(path):
             if v == destination:

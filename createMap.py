@@ -15,22 +15,51 @@ class MapCreator:
         pygame.display.set_caption(('MapCreator'))
         self.clock = pygame.time.Clock()
         self.nodes = []
-        if os.path.isfile('Nodes.csv') and os.path.isfile('Connections.csv') and os.path.isfile('Product.csv'):
+        if os.path.isfile('Nodes.csv') and os.path.isfile('Connections.csv') and os.path.isfile(
+                'Product.csv') and os.path.isfile('Paths.csv'):
             file = open('Nodes.csv')
             for line in file.read().splitlines():
                 val = [int(i) for i in line.split(';')]
-                self.nodes.append(Node.Node(val[0], val[1], val[2]))
+                tempnode = Node.Node(val[0])
+                tempnode.set_coordinates(val[1], val[2])
+                self.nodes.append(tempnode)
             file.close()
             file = open('Connections.csv')
             for line in file.read().splitlines():
                 val = [int(i) for i in line.split(';')]
-                self.nodes[val[0]].connections.append(self.nodes[val[1]])
-                self.nodes[val[1]].connections.append(self.nodes[val[0]])
+                node1 = None
+                node2 = None
+                for node in self.nodes:
+                    if node.id == val[0]:
+                        node1 = node
+                for node in self.nodes:
+                    if node.id == val[1]:
+                        node2 = node
+                node1.connections.add(node2)
+                node2.connections.add(node1)
             file.close()
             file = open('Product.csv')
             for line in file.read().splitlines():
                 val = line.split(';')
-                self.nodes[int(val[0])].products.append(Product.Product(val[1],self.nodes[int(val[0])]))
+                node1 = None
+                for node in self.nodes:
+                    if node.id == int(val[0]):
+                        node1 = node
+                node1.products.add(Product.Product(val[1], self.nodes[int(val[0])]))
+            file.close()
+            file = open('Paths.csv')
+            for line in file.read().splitlines():
+                val = [int(i) for i in line.split(';')]
+                node1 = None
+                node2 = None
+                for node in self.nodes:
+                    if node.id == val[0]:
+                        node1 = node
+                for node in self.nodes:
+                    if node.id == val[1]:
+                        node2 = node
+                node1.paths.add(node2)
+                node2.paths.add(node1)
             file.close()
         else:
             for y in range(26):

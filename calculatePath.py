@@ -49,11 +49,27 @@ def bfs(graph, start, destination):
             else:
                 queue.append((v, path + [v]))
 
+def calculate_path2(start, destination):
+    try:
+        return next(bfs2(start, destination))
+    except StopIteration:
+        return None
 
-try:
+def bfs2(start, destination):
+    queue = [(start, [start])]
+    while queue:
+        (vertex, path) = queue.pop(0)
+        for v in vertex.paths - set(path):
+            if v == destination:
+                yield path + [v]
+            else:
+                queue.append((v, path + [v]))
+
+
+'''try:
     adjacency_list = get_adjacency_list()
     destination = adjacency_list.get_product_destination(get_product_name())
     path = calculate_path(adjacency_list.graph, 1, destination)
     print(path)
 except:
-    print("Could not find the product")
+    print("Could not find the product")'''

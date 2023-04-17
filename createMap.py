@@ -19,7 +19,7 @@ class MapCreator:
             file = open('Nodes.csv')
             for line in file.read().splitlines():
                 val = [int(i) for i in line.split(';')]
-                self.nodes.append(Node.Node(val[0],val[1],val[2]))
+                self.nodes.append(Node.Node(val[0], val[1], val[2]))
             file.close()
             file = open('Connections.csv')
             for line in file.read().splitlines():
@@ -35,7 +35,7 @@ class MapCreator:
         else:
             for y in range(26):
                 for x in range(26):
-                    self.nodes.append(Node.Node(y*26+x,x,y))
+                    self.nodes.append(Node.Node(y * 26 + x, x, y))
         self.clickedNode = None
 
     def show(self):

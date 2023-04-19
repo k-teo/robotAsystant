@@ -7,6 +7,7 @@ class Node:
         self.connections = set()
         self.paths = set()
         self.products = set()
+        self.distance = 0
 
     def set_coordinates(self, x, y):
         self.x = x

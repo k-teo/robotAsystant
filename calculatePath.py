@@ -57,13 +57,15 @@ def calculate_path2(start, destination):
 
 def bfs2(start, destination):
     queue = [(start, [start])]
+    visitedNodes = [start]
     while queue:
         (vertex, path) = queue.pop(0)
-        for v in vertex.paths - set(path):
+        for v in vertex.paths - set(visitedNodes):
             if v == destination:
                 yield path + [v]
             else:
                 queue.append((v, path + [v]))
+                visitedNodes.append(v)
 
 
 '''try:

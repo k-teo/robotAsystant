@@ -6,6 +6,7 @@ from datetime import datetime
 import Product
 import random
 import calculatePath
+import textComparator
 
 
 class Map:
@@ -13,16 +14,19 @@ class Map:
         pygame.init()
         pygame.font.init()
         self.font = pygame.font.Font(None, 20)
+        self.fontSmall = pygame.font.Font(None, 16)
         self.window = pygame.display.set_mode((988+148, 988))
         pygame.display.set_caption(('MapCreator'))
         self.clock = pygame.time.Clock()
         self.nodes = []
         self.products = []
+        self.destinationProducts = []
         self.productTextRect = pygame.Rect(988 - 37 + 13 + 13, 13+13, 148 - 13, 40)
         self.productTextActive = False
         self.productTextColor = (225, 225, 225)
         self.productText = ''
         self.path = []
+        self.textComp = textComparator.TextComparator()
         if os.path.isfile('Nodes.csv') and os.path.isfile('Connections.csv') and os.path.isfile('Product.csv') and os.path.isfile('Paths.csv'):
             file = open('Nodes.csv')
             for line in file.read().splitlines():
@@ -83,6 +87,33 @@ class Map:
         pygame.draw.rect(self.window, (225, 225, 225), (988 - 37 + 13, 13, 148 + 13, 988 - 37))
         pygame.draw.rect(self.window, self.productTextColor, self.productTextRect)
         pygame.draw.rect(self.window, (0,0,0), self.productTextRect,1)
+        for i in range(len(self.destinationProducts)):
+            #napis produktu
+            pygame.draw.rect(self.window, (245, 245, 245), pygame.Rect(988 - 37 + 13 + 13, 13+13+40+5+i*25, 81, 20))
+            pygame.draw.rect(self.window, (0, 0, 0), pygame.Rect(988 - 37 + 13 + 13, 13+13+40+5+i*25, 81, 20), 1)
+            self.window.blit(self.fontSmall.render(self.destinationProducts[i].name, True, (0, 0, 0)),
+                             (988 - 37 + 13 + 13 +5, 13+13+40+5+i*25 + 4))
+            #wyznacz trasę
+            pygame.draw.rect(self.window, (245, 245, 245),
+                             pygame.Rect(988 - 37 + 13 + 13 + 83, 13 + 13 + 40 + 5 + i * 25, 25, 20))
+            pygame.draw.rect(self.window, (0, 0, 0), pygame.Rect(988 - 37 + 13 + 13+ 83, 13 + 13 + 40 + 5 + i * 25, 25, 20),
+                             1)
+            self.window.blit(self.fontSmall.render('->', True, (0, 0, 225)),
+                             (988 - 37 + 13 + 13 + 5 + 84, 13 + 13 + 40 + 5 + i * 25 + 4))
+            #usuń
+            pygame.draw.rect(self.window, (245, 245, 245),
+                             pygame.Rect(988 - 37 + 13 + 13 + 83 + 27, 13 + 13 + 40 + 5 + i * 25, 25, 20))
+            pygame.draw.rect(self.window, (0, 0, 0), pygame.Rect(988 - 37 + 13 + 13 + 83 + 27, 13 + 13 + 40 + 5 + i * 25, 25, 20),
+                             1)
+            self.window.blit(self.fontSmall.render('X', True, (255, 0, 0)),
+                             (988 - 37 + 13 + 13 + 5 + 84 + 27, 13 + 13 + 40 + 5 + i * 25 + 4))
+        #Droga po wszystkich
+        pygame.draw.rect(self.window, (245, 245, 245),
+                         pygame.Rect(988 - 37 + 13 + 13, 13 + 13 + 40 + 5 + len(self.destinationProducts) * 25, 135, 20))
+        pygame.draw.rect(self.window, (0, 0, 0), pygame.Rect(988 - 37 + 13 + 13, 13 + 13 + 40 + 5 + len(self.destinationProducts) * 25, 135, 20), 1)
+        self.window.blit(self.fontSmall.render('Wszystkie produkty', True, (0, 0, 0)),
+                         (988 - 37 + 13 + 13 + 5, 13 + 13 + 40 + 5 + len(self.destinationProducts) * 25 + 4))
+
         for node in self.nodes:
             for c in node.paths:
                 pygame.draw.line(self.window,(224,224,224),(node.x * 37 + 13,node.y * 37 + 13),(c.x * 37 + 13,c.y * 37 + 13),5)
@@ -120,6 +151,18 @@ class Map:
                     else:
                         self.productTextActive = False
                         self.productTextColor = (240, 240, 240)
+                    if pygame.Rect(988 - 37 + 13 + 13, 13 + 13 + 40 + 5 + len(self.destinationProducts) * 25, 135, 20).collidepoint(event.pos):
+                        print('wszystkie produkty')
+
+                    for i in range(len(self.destinationProducts)):
+                        if pygame.Rect(988 - 37 + 13 + 13+ 83, 13 + 13 + 40 + 5 + i * 25, 25, 20).collidepoint(event.pos):
+                            path = calculatePath.calculate_path2(self.currentNode, self.destinationProducts[i].node)
+                            self.path = path
+                            break
+                        if pygame.Rect(988 - 37 + 13 + 13 + 83 + 27, 13 + 13 + 40 + 5 + i * 25, 25, 20).collidepoint(event.pos):
+                            self.destinationProducts.remove(self.destinationProducts[i])
+                            break
+
 
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_UP:
@@ -137,14 +180,13 @@ class Map:
                     if str(event.unicode).isalpha() and self.productTextActive and len(self.productText)<10:
                         self.productText += event.unicode
                     if event.key == pygame.K_RETURN:
-                        print(self.productText)
                         destination = None
                         for prod in self.products:
-                            if prod.name.lower() == self.productText.lower():
-                                destination = prod.node
+                            if self.textComp.compare(self.productText,prod.name):
+                                destination = prod
                         if destination is not None:
-                            path = calculatePath.calculate_path2(self.currentNode, destination)
-                            self.path = path
+                            if destination not in self.destinationProducts:
+                                self.destinationProducts.append(destination)
                         self.productText = ''
 
             self.show()

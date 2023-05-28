@@ -60,7 +60,7 @@ def bfs2(start, destination):
     visitedNodes = [start]
     while queue:
         (vertex, path) = queue.pop(0)
-        for v in vertex.paths - set(visitedNodes):
+        for v in sorted(vertex.paths - set(visitedNodes), key=lambda x : len(x.paths), reverse=True):
             if v == destination:
                 yield path + [v]
             else:

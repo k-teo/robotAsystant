@@ -152,7 +152,8 @@ class Map:
                         self.productTextActive = False
                         self.productTextColor = (240, 240, 240)
                     if pygame.Rect(988 - 37 + 13 + 13, 13 + 13 + 40 + 5 + len(self.destinationProducts) * 25, 135, 20).collidepoint(event.pos):
-                        print('wszystkie produkty')
+                        path = calculatePath.multipleProducts(self.currentNode, [i.node for i in self.destinationProducts])
+                        self.path = path
 
                     for i in range(len(self.destinationProducts)):
                         if pygame.Rect(988 - 37 + 13 + 13+ 83, 13 + 13 + 40 + 5 + i * 25, 25, 20).collidepoint(event.pos):

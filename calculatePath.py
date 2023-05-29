@@ -67,6 +67,14 @@ def bfs2(start, destination):
                 queue.append((v, path + [v]))
                 visitedNodes.append(v)
 
+def multipleProducts(start, destinations):
+    ret = []
+    for d in destinations:
+        p = next(bfs2(start,d))
+        ret += p
+        start = d
+    return ret
+
 
 '''try:
     adjacency_list = get_adjacency_list()

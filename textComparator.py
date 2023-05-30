@@ -12,5 +12,5 @@ class TextComparator:
         return searchedProduct.lower() == storeProduct.lower()
 
     def is_similar(self, searchedProduct: str, storeProduct: str) -> bool:
-        return nltk.edit_distance(searchedProduct.lower(), storeProduct.lower()) < 4 and \
+        return nltk.edit_distance(searchedProduct.lower(), storeProduct.lower()) < (1 if len(searchedProduct) <= 4 else 2) and \
                nltk.edit_distance(searchedProduct.lower(), storeProduct.lower()) < len(storeProduct)

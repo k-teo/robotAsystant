@@ -1,4 +1,5 @@
 from AdjacencyList import AdjacencyList
+import sys
 
 
 def get_adjacency_list():
@@ -69,10 +70,19 @@ def bfs2(start, destination):
 
 def multipleProducts(start, destinations):
     ret = []
-    for d in destinations:
-        p = next(bfs2(start,d))
-        ret += p
-        start = d
+    while len(destinations) > 0:
+        destination_to_remove = None
+        best = None
+        for d in destinations:
+            p = next(bfs2(start,d))
+            if best is None or len(p) < len(best):
+                next_start = d
+                best = p
+                destination_to_remove = d
+        ret += best
+        if destination_to_remove is not None:
+            destinations.remove(destination_to_remove)
+            start = next_start
     return ret
 
 
